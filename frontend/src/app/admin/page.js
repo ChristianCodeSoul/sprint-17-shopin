@@ -579,7 +579,7 @@ function AdminPage() {
             <span className="modal-icon">!</span>
             <h3>Delete product?</h3>
             <p>
-              Are you sure you want to delete "{editProduct?.title}"?
+              Are you sure you want to delete &quot;{editProduct?.title}&quot;?
             </p>
 
             <div className="modal-actions">
