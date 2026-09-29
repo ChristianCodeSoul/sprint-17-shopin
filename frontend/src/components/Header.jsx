@@ -7,15 +7,17 @@ import { useGetCartQuery } from "@/store/api/api";
 
 export default function Header({ onLogin, onProfile, onCart }) {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        if (typeof window === "undefined") {
+            return false;
+        }
+
+        return localStorage.getItem("shopin-theme") === "dark";
+    });
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem("shopin-theme");
-        const isDark = savedTheme === "dark";
-
-        setDarkMode(isDark);
-        document.documentElement.classList.toggle("dark", isDark);
-    }, []);
+        document.documentElement.classList.toggle("dark", darkMode);
+    }, [darkMode]);
 
     const toggleDarkMode = () => {
         setDarkMode((current) => {
@@ -44,7 +46,7 @@ export default function Header({ onLogin, onProfile, onCart }) {
     });
 
     const cartItems = cartData?.data?.items || [];
-
+    
     const cartCount = cartItems.reduce(
         (total, item) => total + item.quantity,
         0
@@ -63,9 +65,8 @@ export default function Header({ onLogin, onProfile, onCart }) {
                 </Link>
 
                 <nav
-                    className={`nav ${
-                        menuOpen ? "nav-open" : ""
-                    }`}
+                    className={`nav ${menuOpen ? "nav-open" : ""
+                        }`}
                 >
                     <Link href="/" onClick={closeMenu}>
                         Home
